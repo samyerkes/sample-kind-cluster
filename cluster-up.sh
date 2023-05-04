@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export INSTALL_PROM=no
-
 # Create the cluster
 if ! kind create cluster --config cluster.yaml; then
     exit 1
@@ -35,19 +33,10 @@ helm install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
     --set serviceAccount.create=false \
     --set serviceAccount.name=admin-user \
     --set metricsScraper.enabled=true
-if [ "${INSTALL_PROM}" = "yes" ]; then
-    helm install prometheus -n monitoring prometheus-community/kube-prometheus-stack
-fi;
-
-kubectl apply -f vault
+helm install prometheus -n monitoring prometheus-community/kube-prometheus-stack
 
 sleep 5
 echo ""
 echo "Traefik: http://traefik.localhost"
 echo "Dashboard: http://dashboard.localhost"
-if [ "${INSTALL_PROM}" = "yes" ]; then
-    echo "http://grafana.localhost credentials: $(kubectl get secret -n monitoring prometheus-grafana -oyaml | grep admin-user| cut -d: -f2|tr -d \  | base64 -d):$(kubectl get secret -n monitoring prometheus-grafana -oyaml | grep admin-password| cut -d: -f2|tr -d \  | base64 -d)\n"
-fi;
-
-echo "The vault unlock secret (root token) lives in the vault/vault-unlock secret, to get the root token wait up to one minute then run"
-echo "  kubectl get secret -n vault vault-unlock -ojson | jq -r .data.value | base64 -d | jq -r .root_token"
+echo "http://grafana.localhost credentials: $(kubectl get secret -n monitoring prometheus-grafana -oyaml | grep admin-user| cut -d: -f2|tr -d \  | base64 -d):$(kubectl get secret -n monitoring prometheus-grafana -oyaml | grep admin-password| cut -d: -f2|tr -d \  | base64 -d)\n"
