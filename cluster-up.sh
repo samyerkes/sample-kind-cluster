@@ -24,19 +24,11 @@ kubectl --context kind-kind apply -f https://github.com/kubernetes-sigs/metrics-
 sleep 10
 
 # Install stuff via Helm
-helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard \
-    --namespace kubernetes-dashboard \
-    --set protocolHttp=true \
-    --set serviceAccount.create=false \
-    --set serviceAccount.name=admin-user \
-    --set metricsScraper.enabled=true
+# helm repo update
 helm install prometheus -n monitoring prometheus-community/kube-prometheus-stack
 
 sleep 5
 echo ""
 echo "Traefik: http://traefik.localhost"
-echo "Dashboard: http://dashboard.localhost"
-echo "http://grafana.localhost credentials: $(kubectl get secret -n monitoring prometheus-grafana -oyaml | grep admin-user| cut -d: -f2|tr -d \  | base64 -d):$(kubectl get secret -n monitoring prometheus-grafana -oyaml | grep admin-password| cut -d: -f2|tr -d \  | base64 -d)\n"
+echo "Grafana: http://grafana.localhost credentials: $(kubectl get secret -n monitoring prometheus-grafana -oyaml | grep admin-user| cut -d: -f2|tr -d \  | base64 -d):$(kubectl get secret -n monitoring prometheus-grafana -oyaml | grep admin-password| cut -d: -f2|tr -d \  | base64 -d)"

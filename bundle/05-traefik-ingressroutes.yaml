@@ -23,23 +23,6 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: kubernetes-dashboard
-  namespace: kubernetes-dashboard
-spec:
-  entryPoints:
-    - http
-  routes:
-  - match: Host(`dashboard.localhost`)
-    kind: Rule
-    middlewares:
-    services:
-    - name: kubernetes-dashboard
-      port: 443
-      scheme: http
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
   name: traefik-dashboard
   namespace: traefik
 spec:
