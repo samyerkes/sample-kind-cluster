@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 # Create the cluster
 if ! kind create cluster --config cluster.yaml; then
@@ -23,10 +23,20 @@ kubectl --context kind-kind apply -f bundle
 kubectl --context kind-kind apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 sleep 10
 
-# Install stuff via Helm
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-# helm repo update
-helm install prometheus -n monitoring prometheus-community/kube-prometheus-stack
+# Helm repo update
+helm install prometheus prometheus-community/kube-prometheus-stack \
+    -n monitoring 
+
+helm install sealed-secrets \
+    -n kube-system \
+    --set-string fullnameOverride=sealed-secrets-controller \
+    sealed-secrets/sealed-secrets
+
+# Install Flux
+flux install \
+    --namespace=flux-system \
+    --network-policy=false \
+    --components=source-controller,helm-controller
 
 sleep 5
 echo ""
