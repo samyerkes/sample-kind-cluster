@@ -14,25 +14,25 @@ kubectl --context kind-kind apply -f bundle
 sleep 10
 kubectl --context kind-kind apply -f bundle
 
-# give some crds time to register
+# Give some CRDs time to register
 sleep 10
-# and try again
+# ... and try again
 kubectl --context kind-kind apply -f bundle
 
 # Installs the metrics server
 kubectl --context kind-kind apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 sleep 10
 
-# Helm repo update
+# Install the Helm charts
 # ... Grafana + Prometheus
-helm install prometheus prometheus-community/kube-prometheus-stack \
+helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
     -n metrics 
 
 # ... Sealed Secrets
 helm install sealed-secrets \
-    -n kube-system \
+    sealed-secrets/sealed-secrets \
     --set-string fullnameOverride=sealed-secrets-controller \
-    sealed-secrets/sealed-secrets
+    -n kube-system
 
 # ... Flux
 flux install \
@@ -43,4 +43,4 @@ flux install \
 sleep 5
 echo ""
 echo "Traefik: http://traefik.localhost"
-echo "Grafana: http://grafana.localhost credentials: $(kubectl get secret -n metrics prometheus-grafana -oyaml | grep admin-user| cut -d: -f2|tr -d \  | base64 -d):$(kubectl get secret -n metrics prometheus-grafana -oyaml | grep admin-password| cut -d: -f2|tr -d \  | base64 -d)"
+echo "Grafana: http://grafana.localhost credentials: $(kubectl get secret -n metrics kube-prometheus-stack-grafana -oyaml | grep admin-user| cut -d: -f2|tr -d \  | base64 -d):$(kubectl get secret -n metrics kube-prometheus-stack-grafana -oyaml | grep admin-password| cut -d: -f2|tr -d \  | base64 -d)"

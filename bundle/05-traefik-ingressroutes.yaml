@@ -8,7 +8,7 @@ metadata:
 spec:
   ipWhiteList:
     sourceRange:
-    - 0.0.0.0/0
+      - 0.0.0.0/0
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
@@ -29,13 +29,13 @@ spec:
   entryPoints:
     - http
   routes:
-  - match: Host(`traefik.localhost`)
-    kind: Rule
-    middlewares:
-    services:
-    - name: traefik-internal
-      port: 8080
-      scheme: http
+    - match: Host(`traefik.localhost`)
+      kind: Rule
+      middlewares:
+      services:
+        - name: traefik-internal
+          port: 8080
+          scheme: http
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -46,13 +46,13 @@ spec:
   entryPoints:
     - http
   routes:
-  - match: Host(`grafana.localhost`)
-    kind: Rule
-    middlewares:
-    services:
-    - name: prometheus-grafana
-      port: 80
-      scheme: http
+    - match: Host(`grafana.localhost`)
+      kind: Rule
+      middlewares:
+      services:
+        - name: kube-prometheus-stack-grafana
+          port: 80
+          scheme: http
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -63,10 +63,10 @@ spec:
   entryPoints:
     - http
   routes:
-  - match: Host(`prometheus.localhost`)
-    kind: Rule
-    middlewares:
-    services:
-    - name: prometheus-kube-prometheus-prometheus
-      port: 9090
-      scheme: http
+    - match: Host(`prometheus.localhost`)
+      kind: Rule
+      middlewares:
+      services:
+        - name: prometheus-kube-prometheus-prometheus
+          port: 9090
+          scheme: http
