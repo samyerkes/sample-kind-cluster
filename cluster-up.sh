@@ -18,9 +18,6 @@ kubectl --context kind-kind apply -f bundle
 sleep 10
 # ... and try again
 kubectl --context kind-kind apply -f bundle
-
-# Installs the metrics server
-kubectl --context kind-kind apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 sleep 10
 
 # Install the Helm charts
