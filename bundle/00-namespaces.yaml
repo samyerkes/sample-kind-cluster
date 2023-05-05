@@ -5,10 +5,3 @@ metadata:
   labels:
     name: traefik
   name: traefik
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    name: metrics
-  name: metrics
