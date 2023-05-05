@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -53,8 +54,8 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: ingress-controller
-                operator: In
-                values:
-                - "true"
+              - matchExpressions:
+                  - key: ingress-controller
+                    operator: In
+                    values:
+                      - "true"
