@@ -24,15 +24,17 @@ kubectl --context kind-kind apply -f https://github.com/kubernetes-sigs/metrics-
 sleep 10
 
 # Helm repo update
+# ... Grafana + Prometheus
 helm install prometheus prometheus-community/kube-prometheus-stack \
-    -n monitoring 
+    -n metrics 
 
+# ... Sealed Secrets
 helm install sealed-secrets \
     -n kube-system \
     --set-string fullnameOverride=sealed-secrets-controller \
     sealed-secrets/sealed-secrets
 
-# Install Flux
+# ... Flux
 flux install \
     --namespace=flux-system \
     --network-policy=false \
@@ -41,4 +43,4 @@ flux install \
 sleep 5
 echo ""
 echo "Traefik: http://traefik.localhost"
-echo "Grafana: http://grafana.localhost credentials: $(kubectl get secret -n monitoring prometheus-grafana -oyaml | grep admin-user| cut -d: -f2|tr -d \  | base64 -d):$(kubectl get secret -n monitoring prometheus-grafana -oyaml | grep admin-password| cut -d: -f2|tr -d \  | base64 -d)"
+echo "Grafana: http://grafana.localhost credentials: $(kubectl get secret -n metrics prometheus-grafana -oyaml | grep admin-user| cut -d: -f2|tr -d \  | base64 -d):$(kubectl get secret -n metrics prometheus-grafana -oyaml | grep admin-password| cut -d: -f2|tr -d \  | base64 -d)"

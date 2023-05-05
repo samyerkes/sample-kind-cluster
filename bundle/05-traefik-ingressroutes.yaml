@@ -41,7 +41,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: grafana
-  namespace: monitoring
+  namespace: metrics
 spec:
   entryPoints:
     - http
@@ -58,7 +58,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: prometheus
-  namespace: monitoring
+  namespace: metrics
 spec:
   entryPoints:
     - http
