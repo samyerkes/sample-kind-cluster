@@ -31,7 +31,7 @@ kubectl apply -f helm/ --recursive
 
 echo ""
 echo "Letting the cluster settle..."
-sleep 45
+sleep 120
 echo ""
 echo "Traefik: http://traefik.localhost"
 echo "Grafana: http://grafana.localhost credentials: $(kubectl get secret -n metrics kube-prometheus-stack-grafana -oyaml | grep admin-user | cut -d: -f2 | tr -d \  | base64 -d):$(kubectl get secret -n metrics kube-prometheus-stack-grafana -oyaml | grep admin-password | cut -d: -f2 | tr -d \ | base64 -d)"
