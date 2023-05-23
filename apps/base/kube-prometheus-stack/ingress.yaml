@@ -1,11 +1,4 @@
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    name: metrics
-  name: metrics
----
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -39,26 +32,3 @@ spec:
         - name: prometheus-kube-prometheus-prometheus
           port: 9090
           scheme: http
----
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: HelmRepository
-metadata:
-  name: prometheus-community
-  namespace: metrics
-spec:
-  interval: 5m0s
-  url: https://prometheus-community.github.io/helm-charts
----
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
-kind: HelmRelease
-metadata:
-  name: kube-prometheus-stack
-  namespace: metrics
-spec:
-  interval: 5m
-  chart:
-    spec:
-      chart: kube-prometheus-stack
-      sourceRef:
-        kind: HelmRepository
-        name: prometheus-community

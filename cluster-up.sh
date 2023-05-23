@@ -9,25 +9,28 @@ fi;
 kubectl --context kind-kind taint nodes --all node-role.kubernetes.io/master- || true
 
 # Applies the manifests
-kubectl --context kind-kind apply -f bundle
+kubectl --context kind-kind apply -f infrastructure/ --recursive
 # yeah some CRDs are not available right away
 sleep 10
-kubectl --context kind-kind apply -f bundle
+kubectl --context kind-kind apply -f infrastructure/ --recursive
 
 # Give some CRDs time to register
 sleep 10
 # ... and try again
-kubectl --context kind-kind apply -f bundle
+kubectl --context kind-kind apply -f infrastructure/ --recursive
 sleep 10
 
 # Install Flux
 flux install \
     --namespace=flux-system \
     --network-policy=false \
-    --components=source-controller,helm-controller
+    --components=source-controller,helm-controller,kustomize-controller
 
-# Install the Helm charts
-kubectl apply -f helm/ --recursive
+# Install kustomize on clusters
+kubectl apply -f clusters/ --recursive
+
+# Apply the app kustomizations to each cluster
+kubectl apply -k apps/staging/.
 
 echo ""
 echo "Letting the cluster settle..."
