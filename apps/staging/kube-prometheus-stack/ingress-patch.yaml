@@ -5,17 +5,15 @@ metadata:
   name: grafana-prometheus
   namespace: metrics
 spec:
-  entryPoints:
-    - http
   routes:
-    - match: Host(`grafana.localhost`)
+    - match: Host(`grafana.staging.localhost`)
       kind: Rule
       middlewares:
       services:
         - name: kube-prometheus-stack-grafana
           port: 80
           scheme: http
-    - match: Host(`prometheus.localhost`)
+    - match: Host(`prometheus.staging.localhost`)
       kind: Rule
       middlewares:
       services:
