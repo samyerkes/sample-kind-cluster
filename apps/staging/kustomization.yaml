@@ -6,6 +6,9 @@ resources:
   - ../base/sealed-secrets
   - ../base/kube-prometheus-stack
 patches:
-  - path: kube-prometheus-stack-values.yaml
+  - path: kube-prometheus-stack/release-patch.yaml
     target:
       kind: HelmRelease
+  - path: kube-prometheus-stack/ingress-patch.yaml
+    target:
+      kind: IngressRoute
