@@ -9,14 +9,13 @@ ingress.
 
 ## Create the cluster
 
-Just run:
+To start, run:
 
-```bash
+```console
 ./cluster-up.sh
 ```
 
-Wait a bit then you should have your traefik dashboard available at
-[localhost:8080](http://localhost:8080)
+After a successful installation, the applications will be accessible at:
 
-The script will install the traefik dashboard at
-[traefik.localhost](http://traefik.localhost/dashboard/#/).
+* [traefik.localhost](http://traefik.localhost/dashboard/#/)
+* [grafana.localhost](http://grafana.localhost)
