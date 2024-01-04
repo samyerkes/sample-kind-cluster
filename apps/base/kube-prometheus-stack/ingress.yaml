@@ -19,6 +19,6 @@ spec:
       kind: Rule
       middlewares:
       services:
-        - name: prometheus-kube-prometheus-prometheus
+        - name: prometheus-kube-stack-prometheus
           port: 9090
           scheme: http
