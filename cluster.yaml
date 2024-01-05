@@ -25,7 +25,11 @@ nodes:
         protocol: TCP
   - role: worker
     image: kindest/node:v1.23.6
+    extraMounts:
+      - hostPath: ./files
+        containerPath: /files
   - role: worker
     image: kindest/node:v1.23.6
-  - role: worker
-    image: kindest/node:v1.23.6
+    extraMounts:
+      - hostPath: ./files
+        containerPath: /files
