@@ -6,7 +6,7 @@ if ! kind create cluster --config cluster.yaml; then
 fi;
 
 # Untaint the master
-kubectl --context kind-kind taint nodes --all node-role.kubernetes.io/master- || true
+kubectl --context kind-kind taint nodes --all node-role.kubernetes.io/control-plane- || true
 
 # Applies the manifests
 kubectl --context kind-kind apply -f infrastructure/ --recursive
@@ -33,8 +33,12 @@ kubectl apply -f clusters/ --recursive
 kubectl apply -k apps/production/.
 
 echo ""
-echo "Letting the cluster settle..."
-sleep 120
+echo "Waiting for applications to be ready..."
+echo ""
+kubectl wait --for=condition=ready helmrelease/echo-server -n echo --timeout=300s
+kubectl wait --for=condition=ready helmrelease/sealed-secrets -n kube-system --timeout=300s
+kubectl wait --for=condition=ready helmrelease/kube-prometheus-stack -n metrics --timeout=300s
+
 echo ""
 echo "Traefik: http://traefik.localhost"
 echo "Grafana: http://grafana.localhost credentials: $(kubectl get secret -n metrics kube-prometheus-stack-grafana -oyaml | grep admin-user | cut -d: -f2 | tr -d \  | base64 -d):$(kubectl get secret -n metrics kube-prometheus-stack-grafana -oyaml | grep admin-password | cut -d: -f2 | tr -d \ | base64 -d)"
